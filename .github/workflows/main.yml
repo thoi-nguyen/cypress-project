@@ -25,25 +25,15 @@ jobs:
       - name: 🎭 Install Cypress browsers
         run: npx cypress install
 
+      - name: Create reports directory
+        run: mkdir -p cypress/reports/html
+
       - name: 🧪 Run Cypress tests
-        run: npx cypress run
-
-      - name: 📄 Upload Cypress screenshots (on failure)
-        uses: actions/upload-artifact@v4
-        if: failure()
-        with:
-          name: cypress-screenshots
-          path: cypress/screenshots
-
-      - name: 📄 Upload Cypress videos (on failure)
-        uses: actions/upload-artifact@v4
-        if: failure()
-        with:
-          name: cypress-videos
-          path: cypress/videos
+        run: npx cypress run --reporter cypress-mochawesome-reporter
 
       - name: 📊 Upload Test Report
         uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: cypress-report
           path: cypress/reports/html
